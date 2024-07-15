@@ -1,12 +1,11 @@
-from send_to_wechat import SendToWechat
+# from send_to_wechat import SendToWechat
 from general_operation import GeneralOperation
 from zombie import Zombie
 
 def main():
     # send = SendToWechat()
     # send.send_txt("一鹿上有你", "自动消息：你好啊")
-    # gen = GeneralOperation()
-    # gen.operate_postman()
+    # print('heelo work')
 
     zo = Zombie()
     zo.start()

@@ -1,10 +1,7 @@
 # 实现一些小的通用操作
 
-import time
 from pywinauto.application import Application
-from pywinauto.keyboard import send_keys
-import pyautogui
-import cv2  
+import pyautogui, os, cv2
 import numpy as np 
 
 class GeneralOperation:
@@ -16,7 +13,7 @@ class GeneralOperation:
     def click_button(self, button_image):
         # 截取全屏  
         screenshot = pyautogui.screenshot()
-
+        print("current folder:", os.getcwd()) 
         # 加载图像  
         image = cv2.imread(button_image, 0)  # 0 表示以灰度模式读取  
         w, h = image.shape[::-1]
