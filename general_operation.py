@@ -1,7 +1,7 @@
 # 实现一些小的通用操作
 
 from pywinauto.application import Application
-import pyautogui, os, cv2
+import pyautogui, os, cv2, aircv 
 import numpy as np 
 
 class GeneralOperation:
@@ -33,9 +33,12 @@ class GeneralOperation:
         for pt in zip(*loc[::-1]):  
             cv2.rectangle(screenshot_array, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 2)  
 
+        print('start:', button_image)
         if loc[0].size > 0:  
             # 获取第一个匹配项的位置（注意：这里需要调整坐标以匹配pyautogui的期望）  
-            x, y = loc[1][0], loc[0][0]  
+            x, y = loc[1][0], loc[0][0]
+
+            print('start:', button_image, x, y)
             
             # 考虑模板的宽度和高度来更精确地定位点击位置  
             click_x, click_y = x + w // 2, y + h // 2  
@@ -67,7 +70,9 @@ class GeneralOperation:
         for pt in zip(*loc[::-1]):  
             cv2.rectangle(screenshot_array, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 2)  
 
+        print('start:', button_image)
         if loc[0].size > 0:
+            print('start:', button_image, loc[1][0], loc[0][0])
             return True
         
         return False
@@ -92,15 +97,17 @@ class GeneralOperation:
         
             # 使用模板匹配  
             res = cv2.matchTemplate(gray, image, cv2.TM_CCOEFF_NORMED)  
-            threshold = 0.8  # 你可以调整这个阈值  
+            threshold = 0.8  # 可以调整这个阈值  
             loc = np.where(res >= threshold)  
             
             # 在截图中标记所有匹配项  
             for pt in zip(*loc[::-1]):  
                 cv2.rectangle(screenshot_array, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 2)  
 
+            print('start:', name)
             if loc[0].size > 0:
                 x, y = loc[1][0], loc[0][0]
+                print('start:', name, x, y)
 
                 click_x, click_y = x + w // 2, y + h // 2  
 
@@ -109,4 +116,17 @@ class GeneralOperation:
                 check_list.append(item_image)
 
         return check_list
+    
+    def matchImg(self, button_image, confidencevalue=0.6):
+        imgsrc = pyautogui.screenshot()
+        screenshot_array = np.array(imgsrc)
+        imobj = aircv.imread(button_image)
+        match_result = aircv.find_all_template(screenshot_array, imobj, confidencevalue)
+        if match_result:
+            
+            # 模拟点击
+            x = match_result[0]['result'][0]
+            y = match_result[0]['result'][1]
+            pyautogui.click(x, y)
+            print(button_image, x, y)
             

@@ -37,6 +37,8 @@ class Zombie:
         self.gen.open_app()
         time.sleep(2)
 
+        # self.gen.matchImg(self.imagelist['applet'])
+
         # 小程序入口
         self.gen.click_button(self.imagelist['applet'])
         time.sleep(5)
